@@ -22,22 +22,48 @@ const Dashboard = () => {
 
   const colors = ['#9333ea', '#d97706', '#dc2626', '#084c7a', '#16a34a']
 
+  // --- Create Resume ---
   const createResume = async (event) => {
     event.preventDefault()
     if (!title.trim()) return
     setShowCreateResume(false)
+    setTitle('')
     navigate(`/app/builder/resume124`)
   }
 
+  // --- Upload Resume ---
   const uploadResume = async (event) => {
     event.preventDefault()
     if (!title.trim() || !resume) return
     setShowUploadResume(false)
+    setTitle('')
+    setResume(null)
     navigate(`/app/builder/resume124`)
   }
 
+  // --- Load Dummy Data ---
   const loadAllResumes = async () => {
     setAllresumes(dummyResumeData)
+  }
+
+  // --- Edit Resume Title ---
+  const editTitle = async (event) => {
+    event.preventDefault()
+    if (!title.trim()) return
+
+    setAllresumes((prev) =>
+      prev.map((item) =>
+        item._id === editResumeId ? { ...item, title } : item
+      )
+    )
+    setEditResumeId('')
+    setTitle('')
+  }
+
+  // --- Delete Resume ---
+  const deleteResume = (id) => {
+    const confirm=
+    setAllresumes((prev) => prev.filter((item) => item._id !== id))
   }
 
   useEffect(() => {
@@ -93,6 +119,7 @@ const Dashboard = () => {
             return (
               <button
                 key={index}
+                onClick={() => navigate(`/app/builder/${resume._id}`)}
                 className='relative w-full sm:max-w-36 h-48 rounded-lg
                 flex flex-col items-center gap-4 border group justify-center hover:shadow-lg transition-all duration-300 cursor-pointer'
                 style={{
@@ -117,12 +144,22 @@ const Dashboard = () => {
                   updated on {new Date(resume.updatedAt).toLocaleDateString()}
                 </p>
 
-                <div
-                  className='absolute top-1 right-1 group-hover:flex items-center hidden'
-                  style={{ color: baseColor + '90' }}
-                >
-                  <TrashIcon className='size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors' />
-                  <PencilIcon className='size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors' />
+                <div className='absolute top-1 right-1 group-hover:flex items-center hidden'>
+                  <TrashIcon
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      deleteResume(resume._id)
+                    }}
+                    className='size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors cursor-pointer'
+                  />
+                  <PencilIcon
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setEditResumeId(resume._id)
+                      setTitle(resume.title)
+                    }}
+                    className='size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors cursor-pointer'
+                  />
                 </div>
               </button>
             )
@@ -238,6 +275,49 @@ const Dashboard = () => {
                   setShowUploadResume(false)
                   setTitle('')
                   setResume(null)
+                }}
+                className='size-8 absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-full cursor-pointer transition-colors'
+              />
+            </div>
+          </div>
+        )}
+
+        {/* --- Popup Modal for Edit Resume --- */}
+        {editResumeId && (
+          <div
+            onClick={() => setEditResumeId('')}
+            className='fixed inset-0 bg-black/70 backdrop-blur bg-opacity-50 z-10 flex items-center justify-center'
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className='relative bg-slate-50 border shadow-md rounded-lg w-full max-w-sm p-6'
+            >
+              <h2 className='text-xl font-semibold mb-4 text-slate-700'>
+                Edit Resume Title
+              </h2>
+
+              <form onSubmit={editTitle}>
+                <input
+                  type='text'
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder='Enter Resume Title'
+                  className='w-full px-3 py-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent mb-4'
+                  required
+                />
+
+                <button
+                  type='submit'
+                  className='w-full px-3 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition-colors'
+                >
+                  Update
+                </button>
+              </form>
+
+              <XIcon
+                onClick={() => {
+                  setEditResumeId('')
+                  setTitle('')
                 }}
                 className='size-8 absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-full cursor-pointer transition-colors'
               />
