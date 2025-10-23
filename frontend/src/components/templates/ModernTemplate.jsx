@@ -40,13 +40,21 @@ const ModernTemplate = ({ data, accentColor }) => {
 					{data.personal_info?.linkedin && (
 						<a target="_blank" href={data.personal_info?.linkedin} className="flex items-center gap-2">
 							<Linkedin className="size-4" />
-							<span className="break-all text-xs">{data.personal_info.linkedin.split("https://www.")[1] ? data.personal_info.linkedin.split("https://www.")[1] : data.personal_info.linkedin}</span>
+							<span className="break-all text-xs">
+								{data.personal_info.linkedin.split("https://www.")[1]
+									? data.personal_info.linkedin.split("https://www.")[1]
+									: data.personal_info.linkedin}
+							</span>
 						</a>
 					)}
 					{data.personal_info?.website && (
 						<a target="_blank" href={data.personal_info?.website} className="flex items-center gap-2">
 							<Globe className="size-4" />
-							<span className="break-all text-xs">{data.personal_info.website.split("https://")[1] ? data.personal_info.website.split("https://")[1] : data.personal_info.website}</span>
+							<span className="break-all text-xs">
+								{data.personal_info.website.split("https://")[1]
+									? data.personal_info.website.split("https://")[1]
+									: data.personal_info.website}
+							</span>
 						</a>
 					)}
 				</div>
@@ -73,11 +81,12 @@ const ModernTemplate = ({ data, accentColor }) => {
 						<div className="space-y-6">
 							{data.experience.map((exp, index) => (
 								<div key={index} className="relative pl-6 border-l border-gray-200">
-
 									<div className="flex justify-between items-start mb-2">
 										<div>
 											<h3 className="text-xl font-medium text-gray-900">{exp.position}</h3>
-											<p className="font-medium" style={{ color: accentColor }}>{exp.company}</p>
+											<p className="font-medium" style={{ color: accentColor }}>
+												{exp.company}
+											</p>
 										</div>
 										<div className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded">
 											{formatDate(exp.start_date)} - {exp.is_current ? "Present" : formatDate(exp.end_date)}
@@ -103,12 +112,17 @@ const ModernTemplate = ({ data, accentColor }) => {
 
 						<div className="space-y-6">
 							{data.project.map((p, index) => (
-								<div key={index} className="relative pl-6 border-l border-gray-200" style={{borderLeftColor: accentColor}}>
-
-
+								<div key={index} className="relative pl-6 border-l border-gray-200" style={{ borderLeftColor: accentColor }}>
 									<div className="flex justify-between items-start">
 										<div>
-											<h3 className="text-lg font-medium text-gray-900">{p.name}</h3>
+											<h3 className="text-lg font-medium text-gray-900">
+												{p.name}
+												{p.type && (
+													<span className="text-sm italic ml-2" style={{ color: accentColor }}>
+														({p.type})
+													</span>
+												)}
+											</h3>
 										</div>
 									</div>
 									{p.description && (
@@ -171,6 +185,6 @@ const ModernTemplate = ({ data, accentColor }) => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default ModernTemplate;
