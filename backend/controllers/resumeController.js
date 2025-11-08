@@ -1,6 +1,7 @@
 import fs from "fs";
 import imagekit from "../configs/imageKit.js";
 import Resume from "../models/Resume.js";
+import { json } from "stream/consumers";
 
 // =====================================================
 // CREATE NEW RESUME
@@ -97,13 +98,20 @@ export const updateResume = async (req, res) => {
     const { resumeId, resumeData, removeBackground } = req.body;
     const image = req.file;
 
-    let updatedResumeData = JSON.parse(resumeData);
+    // ✅ No need to JSON.parse here
+    let resumeDataCopy;
+    if(typeof resumeData ==='string'){
+      resumeDataCopy=await JSON.parse(resumeData)
+    }
+    else{
+      resumeDataCopy=structuredClone(resumeData)
+    }
 
     // Handle profile image upload if provided
     if (image) {
       const imageBufferData = fs.createReadStream(image.path);
 
-      const uploadResponse = await imagekit.upload({
+      const respone = await imagekit.files.upload({
         file: imageBufferData,
         fileName: "resume.png",
         folder: "user-resumes",
@@ -111,26 +119,33 @@ export const updateResume = async (req, res) => {
           pre: `w-300,h-300,fo-face,z-0.75${removeBackground ? ",e-bgremove" : ""}`,
         },
       });
+        if (!resumeDataCopy.personal_info) {
+    resumeDataCopy.personal_info = {};
+  }
 
-      updatedResumeData.profileImage = uploadResponse.url;
 
-      // Delete local temp file
+   resumeDataCopy.personal_info.image = respone.url;
+
       fs.unlinkSync(image.path);
     }
 
     // Update resume
-    const updatedResume = await Resume.findOneAndUpdate(
+    const resume = await Resume.findByIdAndUpdate(
       { userId, _id: resumeId },
-      updatedResumeData,
+      resumeDataCopy,
       { new: true }
     );
 
-    if (!updatedResume) {
+    if (!resume) {
       return res.status(404).json({ message: "Resume not found" });
     }
 
-    return res.status(200).json({ message: "Resume updated successfully", resume: updatedResume });
+    return res.status(200).json({
+      message: "Resume updated successfully",
+      resume
+    });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
 };
+

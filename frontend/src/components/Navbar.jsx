@@ -1,12 +1,17 @@
 import React, { use } from 'react'
 import logo from '../assets/assets/logo.svg'
 import { useNavigate,Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../app/features/authSlice'
 
 const Navbar = () => {
-const user={name:"John"}
+    const {user} =useSelector(state=>state.auth)
+    const disptach=useDispatch()
 const navigate=useNavigate();
 const logoutuser=()=>{
     navigate("/")
+    disptach(logout());
+    
 }
   return (
     <div className='shadow bg-white'>

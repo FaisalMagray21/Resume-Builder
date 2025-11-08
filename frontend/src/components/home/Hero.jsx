@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from '../../assets/assets/logo.svg'
 import React from 'react'
+import { useSelector } from "react-redux";
 
 const Hero = () => {
+    const {user}=useSelector(state=>state.auth)
 
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -24,19 +26,25 @@ const Hero = () => {
                     <img src={logo} alt="PrebuiltUI Logo" className="h-11 w-auto " />
                     </Link>
 
-                    <div className="hidden md:flex items-center gap-8 transition duration-500 text-slate-800">
-                        <Link to="#" className="hover:text-green-600 transition">Home</Link>
-                        <Link to="#features" className="hover:text-green-600 transition">Features</Link>
-                        <Link to="#testimonials" className="hover:text-green-600 transition">Testimonials</Link>
-                        <Link to="#cta" className="hover:text-green-600 transition">Contact</Link>
-                    </div>
+<div className="hidden md:flex items-center gap-8 transition duration-500 text-slate-800">
+  <a href="/" className="hover:text-green-600 transition">Home</a>
+  <a href="#features" className="hover:text-green-600 transition">Features</a>
+  <a href="#testimonials" className="hover:text-green-600 transition">Testimonials</a>
+  <a href="#contact" className="hover:text-green-600 transition">Contact</a>
+</div>
+
+
 
                     <div className="flex gap-2">
-                        <Link to='/app?state=register' className="hidden md:block px-6 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white">
+                        <Link to='/app?state=register' className="hidden md:block px-6 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white" hidden={user}>
                             Get started
                         </Link>
-                        <Link to='/app?state=login' className="hidden md:block px-6 py-2 border active:scale-95 hover:bg-slate-50 transition-all rounded-full text-slate-700 hover:text-slate-900" >
+                        <Link to='/app?state=login' className="hidden md:block px-6 py-2 border active:scale-95 hover:bg-slate-50 transition-all rounded-full text-slate-700 hover:text-slate-900" hidden={user}>
                             Login
+                        </Link>
+                        <Link to='/app'className="hidden md:block px-8 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white"
+                        hidden={!user}>
+                        Dashboard
                         </Link>
                     </div>
 

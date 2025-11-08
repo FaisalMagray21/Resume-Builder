@@ -157,3 +157,37 @@ export const uploadResume=async(req,res)=>{
     }
 
 }
+
+
+// Controller for enhancing a project's description
+// POST: /api/ai/enhance-project-desc
+// controller for enhancing project description
+// POST /api/ai/enhance-project
+export const enhanceProjectDescription = async (req, res) => {
+  try {
+    const { userContent } = req.body;
+
+    if (!userContent) {
+      return res.status(400).json({ message: "Missing required field" });
+    }
+
+    const response = await ai.chat.completions.create({
+      model: process.env.OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert in technical writing. Enhance this project description to make it professional, clear, and ATS-friendly. Focus on technologies used, outcomes, and problem-solving impact. Keep it within 2-3 sentences. Only return plain text."
+        },
+        { role: "user", content: userContent },
+      ],
+    });
+
+    const enhancedContent = response.choices[0].message.content;
+    return res.status(200).json({ enhancedContent });
+  } catch (error) {
+    console.error("Project enhancement error:", error);
+    return res.status(400).json({ message: error.message });
+  }
+};
+

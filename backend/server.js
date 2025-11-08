@@ -20,5 +20,5 @@ app.use('/api/users',userRouter)
 app.use('/api/resumes',resumerouter);
 app.use('/api/ai',aiRouter);
 app.listen(PORT,()=>{
-    console.log(`Server is running on localhost:${PORT}`)
+    console.log(`Server is running on localhost http://localhost:${PORT}`)
 })
