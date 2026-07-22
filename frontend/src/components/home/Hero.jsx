@@ -5,17 +5,11 @@ import React from 'react'
 import { useSelector } from "react-redux";
 
 const Hero = () => {
-    const {user}=useSelector(state=>state.auth)
+    const { user } = useSelector(state => state.auth)
 
     const [menuOpen, setMenuOpen] = useState(false);
 
-    const logos = [
-        'https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg',
-        'https://saasly.prebuiltui.com/assets/companies-logo/framer.svg',
-        'https://saasly.prebuiltui.com/assets/companies-logo/microsoft.svg',
-        'https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg',
-        'https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg',
-    ]
+    const logos = ['Instagram', 'Framer', 'Microsoft', 'Huawei', 'Walmart']
 
     return (
         <>
@@ -23,17 +17,15 @@ const Hero = () => {
                 {/* Navbar */}
                 <nav className="z-50 flex items-center justify-between w-full py-4 px-6 md:px-16 lg:px-24 xl:px-40 text-sm">
                     <Link to={'/'}>
-                    <img src={logo} alt="PrebuiltUI Logo" className="h-11 w-auto " />
+                        <img src={logo} alt="PrebuiltUI Logo" className="h-11 w-auto " />
                     </Link>
 
-<div className="hidden md:flex items-center gap-8 transition duration-500 text-slate-800">
-  <a href="/" className="hover:text-green-600 transition">Home</a>
-  <a href="#features" className="hover:text-green-600 transition">Features</a>
-  <a href="#testimonials" className="hover:text-green-600 transition">Testimonials</a>
-  <a href="#contact" className="hover:text-green-600 transition">Contact</a>
-</div>
-
-
+                    <div className="hidden md:flex items-center gap-8 transition duration-500 text-slate-800">
+                        <a href="/" className="hover:text-green-600 transition">Home</a>
+                        <a href="#features" className="hover:text-green-600 transition">Features</a>
+                        <a href="#testimonials" className="hover:text-green-600 transition">Testimonials</a>
+                        <a href="#contact" className="hover:text-green-600 transition">Contact</a>
+                    </div>
 
                     <div className="flex gap-2">
                         <Link to='/app?state=register' className="hidden md:block px-6 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white" hidden={user}>
@@ -42,9 +34,9 @@ const Hero = () => {
                         <Link to='/app?state=login' className="hidden md:block px-6 py-2 border active:scale-95 hover:bg-slate-50 transition-all rounded-full text-slate-700 hover:text-slate-900" hidden={user}>
                             Login
                         </Link>
-                        <Link to='/app'className="hidden md:block px-8 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white"
-                        hidden={!user}>
-                        Dashboard
+                        <Link to='/app' className="hidden md:block px-8 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white"
+                            hidden={!user}>
+                            Dashboard
                         </Link>
                     </div>
 
@@ -114,8 +106,17 @@ const Hero = () => {
 
                     <p className="py-6 text-slate-600 mt-14">Trusting by leading brands, including</p>
 
-                    <div className="flex flex-wrap justify-between max-sm:justify-center gap-6 max-w-3xl w-full mx-auto py-4" id="logo-container">
-                        {logos.map((logo, index) => <img key={index} src={logo} alt="logo" className="h-6 w-auto max-w-xs" />)}
+                    {/* Logos Section */}
+                    <div className="flex flex-wrap items-center justify-between max-sm:justify-center gap-x-10 gap-y-6 max-w-3xl w-full mx-auto py-4" id="logo-container">
+                        {logos.map((name, index) => (
+                            <span
+                                key={index}
+                                title={name}
+                                className="text-xl md:text-2xl font-semibold tracking-tight text-slate-500 opacity-70 hover:opacity-100 hover:text-slate-800 transition-all duration-300 select-none"
+                            >
+                                {name}
+                            </span>
+                        ))}
                     </div>
                 </div>
             </div>
